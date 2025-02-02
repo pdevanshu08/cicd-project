@@ -1,19 +1,29 @@
 pipeline {
     agent any
+    environment {
+        BACKEND_IMAGE = "backend-app"
+        FRONTEND_IMAGE = "frontend-app"
+    }
     stages {
         stage('Clone Repo') {
             steps {
-                git branch: 'main', git 'https://github.com/pdevanshu08/cicd-project.git'
+                git branch: 'main', url: 'https://github.com/pdevanshu08/cicd-project.git'
             }
         }
         stage('Build Backend') {
             steps {
-                sh 'cd backend && docker build -t backend-app .'
+                sh '''
+                cd backend
+                docker build -t $BACKEND_IMAGE .
+                '''
             }
         }
         stage('Build Frontend') {
             steps {
-                sh 'cd frontend && docker build -t frontend-app .'
+                sh '''
+                cd frontend
+                docker build -t $FRONTEND_IMAGE .
+                '''
             }
         }
         stage('Run Containers') {
