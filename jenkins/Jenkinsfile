@@ -1,0 +1,25 @@
+pipeline {
+    agent any
+    stages {
+        stage('Clone Repo') {
+            steps {
+                git 'https://github.com/your-repo.git'
+            }
+        }
+        stage('Build Backend') {
+            steps {
+                sh 'cd backend && docker build -t backend-app .'
+            }
+        }
+        stage('Build Frontend') {
+            steps {
+                sh 'cd frontend && docker build -t frontend-app .'
+            }
+        }
+        stage('Run Containers') {
+            steps {
+                sh 'docker-compose up -d'
+            }
+        }
+    }
+}
