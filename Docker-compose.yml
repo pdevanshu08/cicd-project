@@ -1,12 +1,27 @@
 version: '3'
+
 services:
   backend:
     build: ./backend
     ports:
       - "5000:5000"
+    networks:
+      - mynetwork
+    volumes:
+      - ./backend:/myapps
+      - /myapps/node_modules
+
   frontend:
     build: ./frontend
     ports:
       - "3000:3000"
     depends_on:
       - backend
+    networks:
+      - mynetwork
+    volumes:
+      - ./frontend:/myapps
+      - /myapps/node_modules
+
+networks:
+  mynetwork:

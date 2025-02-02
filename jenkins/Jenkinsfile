@@ -1,8 +1,8 @@
 pipeline {
     agent any
     environment {
-        BACKEND_IMAGE = "backend-app"
-        FRONTEND_IMAGE = "frontend-app"
+        BACKEND_IMAGE = "backend-app:latest"
+        FRONTEND_IMAGE = "frontend-app:latest"
     }
     stages {
         stage('Clone Repo') {
@@ -26,9 +26,16 @@ pipeline {
                 '''
             }
         }
+        stage('Stop Running Containers') {
+            steps {
+                sh '''
+                docker-compose down || true
+                '''
+            }
+        }
         stage('Run Containers') {
             steps {
-                sh 'docker-compose up -d'
+                sh 'docker-compose up -d --build'
             }
         }
     }
